@@ -5,7 +5,7 @@
     services = {
     hydra = {
       enable = true;
-      hydraURL = "http://ec2-18-222-119-244.us-east-2.compute.amazonaws.com"; # externally visible URL
+      hydraURL = "http://ec2-13-58-169-56.us-east-2.compute.amazonaws.com"; # externally visible URL
       notificationSender = "hydra@holo.host"; # e-mail of hydra service
       # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
       
@@ -24,7 +24,7 @@
           hostName = "localhost";
           system = "x86_64-linux";
           supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
-          maxJobs = 2;
+          maxJobs = 8;
         }      
 
       ];
