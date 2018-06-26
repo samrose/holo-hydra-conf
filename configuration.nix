@@ -28,4 +28,5 @@
         }      
 
       ];
+  nix.gc.automatic = true;
 }
