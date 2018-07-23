@@ -31,8 +31,37 @@
             "/" = {
               proxyPass = "http://127.0.0.1:3000";
             };
+            "/channels" = {
+              alias = "/srv/channels";
+              extraConfig = ''
+                autoindex on;
+              '';
+            };
           };
         };
+      };
+    };
+  };
+
+  systemd.services = {
+    "release-channel-master" = {
+      requires = [ "hydra-server.service" ];
+      after = [ "hydra-server.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = let py = pkgs.python3.withPackages (ps: [ ps.click ]); in ''
+          ${py}/bin/python3 ${./scripts/release-channel.py} --target /srv/channels
+        '';
+      };
+    };
+  };
+
+  systemd.timers = {
+    "release-channel-master" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "minutely";
+        Unit = "release-channel-master.service";
       };
     };
   };
