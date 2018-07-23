@@ -13,15 +13,31 @@
 
       # you will probably also want, otherwise *everything* will be built from scratch
       useSubstitutes = true;
-      listenHost = "0.0.0.0";
+      listenHost = "127.0.0.1";
       port = 3000;
     };
 
-    nginx.enable = true;
-    nginx.config = pkgs.lib.readFile /root/nginx.conf;
+    nginx = {
+      enable = true;
+      recommendedOptimisation = true;
+      recommendedTlsSettings = true;
+      recommendedGzipSettings = true;
+      recommendedProxySettings = true;
+      virtualHosts = {
+        "hydra.holo.yflower.de" = {
+          addSSL = true;
+          enableACME = true;
+          locations = {
+            "/" = {
+              proxyPass = "http://127.0.0.1:3000";
+            };
+          };
+        };
+      };
+    };
   };
 
-  networking.firewall.allowedTCPPorts = [80 22];
+  networking.firewall.allowedTCPPorts = [ 80 443 22 ];
 
   nix.buildMachines = [
     {
